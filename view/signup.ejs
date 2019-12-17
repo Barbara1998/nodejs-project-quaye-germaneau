@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% include partials/head %>
+    </head>
+    <body>
+        <% include partials/navbarNoAuth %>
+        <div class="row" style="background-color: #F1F5F1;">
+            <!-- left column : form for register-->
+            <div class="col-md" style="margin: 30px 20px;">
+                <h2>SIGN UP</h2>
+                <form action="/signup" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">Email address</label>
+                        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                            <label for="inputConfirmEmail">Confirm Email address</label>
+                            <input type="email" class="form-control" id="inputConfirmEmail" name="confirmEmail" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword">Password</label>
+                        <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="register">Register</button>
+                </form>
+            </div>
+            <!-- right colum : image-->
+            <div class="col-md">
+                <img src="/img/dashboard.jpg" class="img-fluid" alt="Responsive image" style="width: 100%; height: auto;">
+            </div>
+        </div>
+    </body>
+</html>
