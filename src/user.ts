@@ -115,7 +115,7 @@ export class UserHandler {
 
     
     public deleteAll(){
-        this.db.del("user:Barbaraaa")
+        this.db.del("user:cynaye")
     }
 
   
