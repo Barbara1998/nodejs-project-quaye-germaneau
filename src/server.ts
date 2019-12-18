@@ -20,6 +20,20 @@ app.set('view engine', 'ejs');
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({"extended": false}))
 
+
+
+/* Session */
+
+//create a level store
+const LevelStore = levelSession(session)
+
+app.use(session({
+    secret: 'my very secret phrase',
+    store: new LevelStore('./db/sessions'),
+    resave: true,
+    saveUninitialized: true
+}))
+
 //route 1
 // app.get('/', (req: any, res: any) => {
 //     res.write('Hello world')
@@ -103,18 +117,6 @@ app.listen(port, (err: Error) => {
     console.log(`server is listening on port ${port}`)
 })
 
-
-/* Session */
-
-//create a level store
-const LevelStore = levelSession(session)
-
-app.use(session({
-    secret: 'my very secret phrase',
-    store: new LevelStore('./db/sessions'),
-    resave: true,
-    saveUninitialized: true
-}))
 
  /* Users Authentification*/
 import { UserHandler, User } from './user'
