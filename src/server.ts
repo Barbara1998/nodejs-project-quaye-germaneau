@@ -106,7 +106,7 @@ const authCheck = function (req: any, res: any, next: any) {
 }
   
 app.get('/', authCheck, (req: any, res: any) => {
-    res.render('hello', { name: req.session.username })
+    res.render('hello', { name: req.session.user.username })
 })
 
 
