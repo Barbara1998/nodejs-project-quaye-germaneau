@@ -4,10 +4,10 @@
   "description": "LAB3 nodejs",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -r ts-node/register src/**/*.test.ts",
-    "build": "./node_modules/.bin/tsc -p tsconfig.json",
-    "start": "./node_modules/.bin/ts-node src/server.ts",
-    "dev": "./node_modules/.bin/nodemon "
+    "test": "mocha -r ts-node/register src/**/*.test.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "ts-node src/server.ts",
+    "dev": "nodemon "
   },
   "author": "Cynthia Quaye and Barbara Germaneau",
   "license": "ISC",
@@ -37,5 +37,13 @@
     "levelup": "^4.3.2",
     "nodemon": "^1.19.4",
     "ts-node": "^8.5.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Barbara1998/nodejs-project-quaye-germaneau.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Barbara1998/nodejs-project-quaye-germaneau/issues"
+  },
+  "homepage": "https://github.com/Barbara1998/nodejs-project-quaye-germaneau#readme"
 }
