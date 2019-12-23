@@ -26,7 +26,7 @@ export class MetricsHandler {
         this.db.close();
     }
 
-    //note for us: on a changé le type de id en string au lieu de number
+    //SAVE
     public save(id: string, metrics: Metric[], callback: (error: Error | null) => void) {
         //stream that writes on the db
         console.log(id + metrics)
@@ -39,6 +39,33 @@ export class MetricsHandler {
         })
         stream.end()
     }
+
+    //UPDATE
+    public update(id: string, timestamp: string, newValue: number, callback: (error: Error | null) => void) {
+
+        this.getOne(id, (err: Error | null, result: any) => {
+            if(err) throw err
+            //stream that writes on the db
+            const stream = WriteStream(this.db)
+            stream.on('error', callback)
+            stream.on('close', callback)
+            result.forEach((m: Metric) => {
+                if(m.timestamp == timestamp){
+                    stream.write({ key: `metric:${id}:${timestamp}`, value: newValue })
+                    stream.end()
+
+                }
+                else{
+                    console.log("This timestamp doesn't exist for this user")
+                    stream.end()
+
+                }
+            })
+
+        })
+
+    }
+
 
     //get all metrics
     public getAll(
