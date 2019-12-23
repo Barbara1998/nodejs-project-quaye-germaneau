@@ -72,6 +72,8 @@ app.get('/metrics/:id', (req: any, res: any) => {
     dbMet.getOne(req.params.id, (err: Error | null, result: any) => {
         if(err) throw err
         res.status(200).send(result)
+        console.log(result)
+        //res.render('index', { name: req.session.username })
         }
     )
 })

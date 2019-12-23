@@ -29,11 +29,13 @@ export class MetricsHandler {
     //note for us: on a changé le type de id en string au lieu de number
     public save(id: string, metrics: Metric[], callback: (error: Error | null) => void) {
         //stream that writes on the db
+        console.log(id + metrics)
         const stream = WriteStream(this.db)
         stream.on('error', callback)
         stream.on('close', callback)
         metrics.forEach((m: Metric) => {
             stream.write({ key: `metric:${id}:${m.timestamp}`, value: m.value })
+            console.log("test")
             console.log(`metric:${id}:${m.timestamp}`)
         })
         stream.end()
