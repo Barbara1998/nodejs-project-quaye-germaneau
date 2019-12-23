@@ -18,15 +18,15 @@
         <div class = "row">
             <div class="col-md" style="margin: 30px 20px;">
                 <h3>Add a metric</h3>
-                <form action="/metrics/:id" method="post"></form>
-                    <div class="form-group">
-                        <label for="value">Value</label>
-                        <input type="text" class="form-control" id="value" name="value" placeholder="Enter value">
-                    </div>
-                    <button type="submit" class="btn btn-success" id="add-metric">Validate</button>
-                </form>
+                    <form id="form_add" action="" method="post">
+                        <div class="form-group">
+                            <label for="value">Value</label>
+                            <input id="value" type="text" class="form-control" name="value" placeholder="Enter value">
+                            <input onclick="addForm()" id="add-metric" type="button" class="btn btn-success" value="Validate">
+                        </div>
+                    </form>
             </div>
-            <div class="col-md" style="margin: 30px 20px;">
+            <!-- <div class="col-md" style="margin: 30px 20px;">
                 <h3>Update a metric</h3>
                     <form action="/metrics" method="post"> 
                         <div class="form-group">
@@ -39,20 +39,74 @@
                         </div>
                         <button type="submit" class="btn btn-success" id="update-metric">Validate</button>
                     </form>
-                </div>
+                </div>-->
             <div class="col-md" style="margin: 30px 20px;">
                 <h3>Delete a metric</h3>
-                <form action="/metrics/:id/:timestamp" method="post"> 
-                    <div class="form-group">
+                <form action="" method="post"> 
+                    <div id = "form_delete" class="form-group">
                         <label for="timestamp">Timestamp</label>
                         <input type="text" class="form-control" id="timestamp" name="timestamp" placeholder="Enter valid timestamp">
                     </div>
-                    <button type="submit" class="btn btn-danger" id="delete-metric">Delete</button>
+                    <input type="button" class="btn btn-danger" id="delete-metric" onclick="deleteMetric()" value = "Delete">
                 </form>
-            </div>
-        </div>
+            </div> 
+        </div> 
     </body>
     <script>
+        function addForm() {
+            var timestamp = Date.now();
+            var value = document.getElementById("value").value;
+            if (validationAdd()) {
+                var key = "metric:"+name+":"+timestamp;
+                var route = "/metrics/"+name;
+                alert(key)
+                document.getElementById("form_add").action = route; 
+                let metric = new Metric(timestamp, value);
+                document.getElementById("form_add").submit(); 
+            }
+        }
+        function validationAdd() {
+            var value = document.getElementById("value").value;
+            if (value === '') {
+                alert("Please fill the value");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        function deleteMetric(){
+            var timestamp = document.getElementById("timestamp").value;
+            alert(timestamp);
+            if (validationDelete() === true) {
+                // var route = "/metrics/"+name+"/"+timestamp;
+                alert("ROUTEé");
+                // alert(route);
+                // document.getElementById("form_delete").action = route;
+                // document.getElementById("form_delete").submit(); 
+            }
+        }
+        function validationDelete() {
+            var timestamp = document.getElementById("timestamp").value;
+            var found = false;
+
+            if (timestamp === '') {
+                alert("Please fill the timestamp");
+                return found;
+            }
+            else {
+                $.getJSON("/metrics/"+name, {}, (data) => {
+                    const content = data.map(d => {
+                        if(d.timestamp === timestamp){
+                            alert("found");
+                            found = true; 
+                        }
+                    })
+                    if(found === false)
+                        alert("not found");
+                })
+                return found;
+            }
+        }
         $('#show-metrics').click((e) => {
             e.preventDefault();
             $.getJSON("/metrics/"+name, {}, (data) => {

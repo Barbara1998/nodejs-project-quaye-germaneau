@@ -65,8 +65,6 @@ export class MetricsHandler {
         })
 
     }
-
-
     //get all metrics
     public getAll(
         callback : (error: Error | null, result : any | null) => void
