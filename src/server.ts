@@ -56,14 +56,22 @@ app.post('/metrics/:id', (req: any, res: any) => {
     })
 })
 
+//route for updating value of a metric
+app.post('/metrics/:id/:timestamp', (req: any, res: any) => {
+
+    dbMet.update(req.params.id, req.params.timestamp, req.body[0], (err: Error | null) => {
+        if (err) throw err
+        res.status(200).send("update metric")
+    })
+})
+
 //route 4 : get all metrics
 app.get('/metrics/', (req: any, res: any) => {
     dbMet.getAll(
         (err: Error | null, result: any) => {
             if(err) throw err    
             res.status(200).send(result)
-        }
-    )
+    })
 })
 
 //route 5 : get metrics from id
@@ -71,8 +79,7 @@ app.get('/metrics/:id', (req: any, res: any) => {
     dbMet.getOne(req.params.id, (err: Error | null, result: any) => {
         if(err) throw err
         res.status(200).send(result)
-        }
-    )
+    })
 })
 
 /* DELETE */
