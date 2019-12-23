@@ -79,7 +79,10 @@ app.get('/metrics/:id', (req: any, res: any) => {
     dbMet.getOne(req.params.id, (err: Error | null, result: any) => {
         if(err) throw err
         res.status(200).send(result)
-    })
+        console.log(result)
+        //res.render('index', { name: req.session.username })
+        }
+    )
 })
 
 /* DELETE */
@@ -111,7 +114,7 @@ const authCheck = function (req: any, res: any, next: any) {
 }
   
 app.get('/', authCheck, (req: any, res: any) => {
-    res.render('hello', { name: req.session.user.username })
+    res.render('hello', { name: req.session.username })
 })
 
 
@@ -151,7 +154,7 @@ app.post('/login', (req: any, res: any, next: any) => {
         if (err) next(err)
         //if undefined not found
         if (result === undefined || !result.validatePassword(req.body.password)) {
-        res.redirect('/login')
+            res.redirect('/login')
         //user found
         } else {
             req.session.loggedIn = true
