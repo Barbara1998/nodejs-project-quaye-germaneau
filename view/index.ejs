@@ -2,6 +2,21 @@
 <html lang="en">
     <head>
         <% include partials/head %>
+        <script>
+            var id = '<%= name %>';
+            function timestampOption(){
+                $.getJSON("/metrics/"+id, {}, (data) => {
+                    const content = data.map(d => {
+                        var option = document.createElement("option");
+                        option.value = d.timestamp;
+                        option.text = d.timestamp;
+                        document.getElementById("updateTimestamp").appendChild(option)
+                        // console.log('<option value="'+d.timestamp+'">'+d.timestamp+'</option>');
+                        // return ('<option value="'+d.timestamp+'">'+d.timestamp+'</option>');
+                    })
+                });
+            }
+        </script>
     </head>
     <body class="container">
         <div class="col-md-6 col-md-offset-3">
@@ -26,20 +41,25 @@
                     <button type="submit" class="btn btn-success" id="add-metric">Validate</button>
                 </form>
             </div>
+            <!-- UPDATE -->
             <div class="col-md" style="margin: 30px 20px;">
                 <h3>Update a metric</h3>
-                    <form action="/metrics" method="post"> 
-                        <div class="form-group">
-                                <label for="timestamp">Timestamp</label>
-                                <input type="text" class="form-control" id="timestamp" name="timestamp" placeholder="Enter valid timestamp">
-                        </div>
-                        <div class="form-group">
-                            <label for="value">Value</label>
-                            <input type="text" class="form-control" id="value" name="value" placeholder="Enter value">
-                        </div>
-                        <button type="submit" class="btn btn-success" id="update-metric">Validate</button>
-                    </form>
-                </div>
+                <form method="post" id="updateForm"> 
+                    <div class="form-group">
+                        <label for="updateTimestamp">Timestamp</label>
+                        <!-- <input type="text" class="form-control" id="updateTimestamp" name="updateTimestamp" placeholder="Enter valid timestamp"> -->
+                        <select class="form-control" id="updateTimestamp" name="updateTimestamp">
+                           <script>timestampOption();</script> 
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateValue">Value</label>
+                        <input type="text" class="form-control" id="updateValue" name="updateValue" placeholder="Enter value">
+                    </div>
+                    <button type="submit" class="btn btn-success" id="update-metric">Validate</button>
+                </form>
+            </div>
+
             <div class="col-md" style="margin: 30px 20px;">
                 <h3>Delete a metric</h3>
                 <form action="/metrics/:id/:timestamp" method="post"> 
@@ -52,15 +72,23 @@
             </div>
         </div>
     </body>
+
     <script>
+        var id = '<%= name %>';
+
         $('#show-metrics').click((e) => {
             e.preventDefault();
-            $.getJSON("/metrics/"+name, {}, (data) => {
+            $.getJSON("/metrics/"+id, {}, (data) => {
             const content = data.map(d => {
                 return 'timestamp: '+d.timestamp+', value: '+d.value+'<br>';
             })
             $('#metrics').append(content.join("\n"));
             });
         })
-    </script>
+
+        $("#updateForm").submit((e)=>{
+            var updateTimestamp = document.getElementById("updateTimestamp").value; 
+            $("#updateForm").attr("action", "/metrics/"+id+"/"+updateTimestamp);
+        })
+    </script>>
 </html>

@@ -39,11 +39,11 @@ app.use(session({
 //     res.end()
 // })
 
-//route 2
-app.get(
-    '/hello/:name', 
-    (req, res) => res.render('hello.ejs', {name: req.params.name})
-)
+// //route 2
+// app.get(
+//     '/hello/:name', 
+//     (req, res) => res.render('hello.ejs', {name: req.params.name})
+// )
 
 //declare a instance of MetricsHandler
 const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
@@ -58,10 +58,9 @@ app.post('/metrics/:id', (req: any, res: any) => {
 
 //route for updating value of a metric
 app.post('/metrics/:id/:timestamp', (req: any, res: any) => {
-
-    dbMet.update(req.params.id, req.params.timestamp, req.body[0], (err: Error | null) => {
+    dbMet.update(req.params.id, req.params.timestamp, parseInt(req.body.updateValue), (err: Error | null) => {
         if (err) throw err
-        res.status(200).send("update metric")
+        res.redirect('/')
     })
 })
 
@@ -187,23 +186,10 @@ app.post('/signup', (req: any, res: any, next: any) => {
 
                         req.session.loggedIn = true
                         req.session.user = newUser
-                        res.redirect('/')  
-
-                        console.log(req.session.user)
-                        console.log("balba")     
+                        res.redirect('/')     
                     })
                 }
-            })
-
-            // if(ok === true){
-            //     console.log("ok=true")
-            //     req.session.loggedIn = true
-            //     req.session.user = newUser
-            //     res.redirect('/')  
-
-            //     console.log(req.session.user)
-            // }
-            
+            })  
     })
 })
 
