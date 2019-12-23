@@ -1,13 +1,14 @@
 {
-  "name": "02_typescript",
+  "name": "nodejs_project_quaye_germaneau",
   "version": "1.0.0",
-  "description": "LAB3 nodejs",
+  "description": "Nodejs project ING4",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha -r ts-node/register src/**/*.test.ts",
     "build": "./node_modules/.bin/tsc -p tsconfig.json",
     "start": "./node_modules/.bin/ts-node src/server.ts",
-    "dev": "./node_modules/.bin/nodemon "
+    "dev": "./node_modules/.bin/nodemon ",
+    "populate": "./node_modules/.bin/ts-node bin/populate.ts"
   },
   "author": "Cynthia Quaye and Barbara Germaneau",
   "license": "ISC",
