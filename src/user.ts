@@ -66,14 +66,8 @@ export class UserHandler {
             .on('data', function (data) {
                 //retrieve username, password and email
                 let username : string = data.key
-                // let password : string = data.value.split(':')[0]
-                // let email : string = data.value.split(':')[1]
                 const [password, email] = data.value.split(":")
-                console.log("pass"+ password)
-
-                console.log("email"+ email)
                 let user = new User(username, email, password)
-
                 //all the users are in
                 users.push(user)
             })
@@ -113,15 +107,21 @@ export class UserHandler {
         }
     }
 
-    
+    //Delete all users
     public deleteAll(){
-        this.db.del("user:cynaye")
+
+        this.getAll(
+            (err: Error | null, result: any) => {
+                if(err) throw err
+                result.forEach((user : User) => {
+                    this.db.del("user:"+user.username)
+                })
+            })
     }
 
   
     //save a new user the user's database
     public save(user: User, callback: (err: Error | null) => void) {
-        console.log("add user")
         this.db.put(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
             callback(err)
         })

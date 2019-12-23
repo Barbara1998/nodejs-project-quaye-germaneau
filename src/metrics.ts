@@ -34,7 +34,6 @@ export class MetricsHandler {
         stream.on('close', callback)
         metrics.forEach((m: Metric) => {
             stream.write({ key: `metric:${id}:${m.timestamp}`, value: m.value })
-            console.log(`metric:${id}:${m.timestamp}`)
         })
         stream.end()
     }
@@ -89,8 +88,7 @@ export class MetricsHandler {
                 let timestamp : string = data.key.split(':')[2]
                 let metric : Metric = new Metric( timestamp, data.value)
                 metrics.push(metric)
-            }
-        
+            }        
         })
         // This catches any errors that happen while creating the readable stream
         .on('error', function (err) {
@@ -141,7 +139,7 @@ export class MetricsHandler {
     }
 
     
-    //delete one metric from an ID
+    //delete all metric from an ID
     public deleteAllFromID(
         id: string,
         callback : (error: Error | null, result : any | null) => void
@@ -183,7 +181,4 @@ export class MetricsHandler {
         })
     }
 
-    public deleteAll(){
-        this.db.del("Barbaraaa")
-    }
 }

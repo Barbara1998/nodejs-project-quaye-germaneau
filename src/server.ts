@@ -21,7 +21,6 @@ app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({"extended": false}))
 
 
-
 /* Session */
 
 //create a level store
@@ -91,11 +90,10 @@ app.delete('/metrics/:id/:timestamp', (req: any, res: any) => {
 //route 7 : delete metrics of user
 app.delete('/metrics/:id', (req: any, res: any) => {
     dbMet.deleteAllFromID(req.params.id, (err: Error | null, result: any) => {
-            if(err) throw err
-            res.status(200).send(result)
-            dbMet.delete(result, req.params.id)
-        }
-    )
+        if(err) throw err
+        res.status(200).send(result)
+        dbMet.delete(result, req.params.id)
+    })
 })
 
 /* Listener */
@@ -199,6 +197,7 @@ app.post('/signup', (req: any, res: any, next: any) => {
     })
 })
 
+//get all users
 app.get('/users', (req: any, res: any, next: any) => {
     //retrieve all users in the database
     dbUser.getAll(
@@ -208,8 +207,8 @@ app.get('/users', (req: any, res: any, next: any) => {
     })
 })
 
+//delete all users
 app.delete('/users', (req: any, res: any, next: any) => {
-    //retrieve all users in the database
     dbUser.deleteAll()
     res.status(200).send("delete ok")
 })
