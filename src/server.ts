@@ -147,11 +147,9 @@ app.post('/login', (req: any, res: any, next: any) => {
     //search for the user
     dbUser.get(req.body.username, (err: Error | null, result?: User) => {
         //if not found error
-        if (err) next(err)
-        //if undefined not found
-        else if (result === undefined || !result.validatePassword(req.body.password)) {
+        if (err || result === undefined || !result.validatePassword(req.body.password)){
             res.redirect('/login')
-        }
+        } 
         //user found
         else {
             req.session.loggedIn = true
@@ -174,17 +172,20 @@ app.post('/signup', (req: any, res: any, next: any) => {
             (exist: false | true) => {
                 //if already exist redirect to login form
                 if(exist === true){
+                    console.log("login rediect")
                     res.redirect('/login')
                 }
                 //if not save it in the database
-                else if(exist === false){
+                else{
                     console.log("save user")
                     dbUser.save(newUser, (err: Error | null) =>  {
                         if(err) res.redirect('/signup')
-
-                        req.session.loggedIn = true
-                        req.session.user = newUser
-                        res.redirect('/')     
+                        else{
+                            req.session.loggedIn = true
+                            req.session.user = newUser
+                            res.redirect('/') 
+                        }
+                            
                     })
                 }
             })  
