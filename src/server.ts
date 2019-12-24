@@ -22,7 +22,6 @@ app.use(bodyparser.urlencoded({"extended": false}))
 
 
 /* Session */
-
 //create a level store
 const LevelStore = levelSession(session)
 
@@ -33,22 +32,11 @@ app.use(session({
     saveUninitialized: true
 }))
 
-//route 1
-// app.get('/', (req: any, res: any) => {
-//     res.write('Hello world')
-//     res.end()
-// })
-
-// //route 2
-// app.get(
-//     '/hello/:name', 
-//     (req, res) => res.render('hello.ejs', {name: req.params.name})
-// )
 
 //declare a instance of MetricsHandler
 const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
 
-//route 3 : write metrics (key, value) in db
+//route 1 : write metrics (key, value) in db
 app.post('/metrics/:id', (req: any, res: any) => {
     let metrics : Metric[] = []
     //create new timestamp
@@ -61,7 +49,7 @@ app.post('/metrics/:id', (req: any, res: any) => {
     })
 })
 
-//route for updating value of a metric
+//route 2 : for updating value of a metric
 app.post('/metrics/:id/:timestamp', (req: any, res: any) => {
     dbMet.update(req.params.id, req.params.timestamp, parseInt(req.body.updateValue), (err: Error | null) => {
         if (err) throw err
@@ -69,7 +57,7 @@ app.post('/metrics/:id/:timestamp', (req: any, res: any) => {
     })
 })
 
-//route 4 : get all metrics
+//route 3 : get all metrics of all users
 app.get('/metrics/', (req: any, res: any) => {
     dbMet.getAll(
         (err: Error | null, result: any) => {
@@ -78,7 +66,7 @@ app.get('/metrics/', (req: any, res: any) => {
     })
 })
 
-//route 5 : get metrics from id
+//route 4 : get all metrics of one user
 app.get('/metrics/:id', (req: any, res: any) => {
     dbMet.getOne(req.params.id, (err: Error | null, result: any) => {
         if(err) throw err
@@ -91,7 +79,7 @@ app.get('/metrics/:id', (req: any, res: any) => {
 
 /* DELETE */
 
-//route 6 : delete one metric from an ID
+//route 5 : delete one metric from an ID
 app.delete('/metrics/:id/:timestamp', (req: any, res: any) => {
     dbMet.deleteOneFromID(req.params.id, req.params.timestamp, (err: Error | null, result: any) => {
             if(err) throw err
@@ -102,7 +90,7 @@ app.delete('/metrics/:id/:timestamp', (req: any, res: any) => {
     )
 })
 
-//route 7 : delete metrics of user
+//route 6 : delete metrics of user
 app.delete('/metrics/:id', (req: any, res: any) => {
     dbMet.deleteAllFromID(req.params.id, (err: Error | null, result: any) => {
         if(err) throw err
@@ -118,7 +106,8 @@ const authCheck = function (req: any, res: any, next: any) {
       next()
     } else res.redirect('/login')
 }
-  
+
+// route 7 : redirect to the dashboard "home page"
 app.get('/', authCheck, (req: any, res: any) => {
     res.render('index', { name: req.session.user.username })
 })
@@ -137,22 +126,23 @@ import { UserHandler, User } from './user'
 const dbUser: UserHandler = new UserHandler('./db/users')
 const authRouter = express.Router()
 
+// route 8 :render sign in form
 authRouter.get('/login', (req: any, res: any) => {
     res.render('login')
 })
-  
+// route 9 : render sign up form
 authRouter.get('/signup', (req: any, res: any) => {
     res.render('signup')
 })
 
-
+// route 10 : for logout redirect to login
 authRouter.get('/logout', (req: any, res: any) => {
     delete req.session.loggedIn
     delete req.session.user
     res.redirect('/login')
 })
 
-
+// route 11 : handle login and redirection to the dashboard or login page
 app.post('/login', (req: any, res: any, next: any) => {
     //search for the user
     dbUser.get(req.body.username, (err: Error | null, result?: User) => {
@@ -170,7 +160,7 @@ app.post('/login', (req: any, res: any, next: any) => {
     })
 })
 
-
+// route 12 : handle Sign up and redirection to the dashboard or login page
 app.post('/signup', (req: any, res: any, next: any) => {
     var newUser = new User(req.body.username, req.body.email, req.body.password)
 
@@ -200,7 +190,7 @@ app.post('/signup', (req: any, res: any, next: any) => {
     })
 })
 
-//get all users
+// route 13 : get all users
 app.get('/users', (req: any, res: any, next: any) => {
     //retrieve all users in the database
     dbUser.getAll(
@@ -210,17 +200,24 @@ app.get('/users', (req: any, res: any, next: any) => {
     })
 })
 
-//delete all users
+// route 14 : delete all users
 app.delete('/users', (req: any, res: any, next: any) => {
     dbUser.deleteAll()
-    res.status(200).send("delete ok")
+    res.status(200).send("delete all users ok")
 })
 
+// route 15 : delete one user
+app.delete('/users/:id', (req: any, res: any, next: any) => {
+    dbUser.delete(req.params.id, (err: Error | null) => {
+        res.status(200).send("delete one user ok")
+    })
+})
 
 /* Athentification Route */
 app.use(authRouter)
 const userRouter = express.Router()
 
+// route 16 : 
 userRouter.post('/', (req: any, res: any, next: any) => {
     dbUser.get(req.body.username, function (err: Error | null, result?: User) {
         if (!err || result !== undefined) {
@@ -236,6 +233,7 @@ userRouter.post('/', (req: any, res: any, next: any) => {
     })
 })
 
+//  route 17 : 
 userRouter.get('/:username', (req: any, res: any, next: any) => {
     dbUser.get(req.params.username, function (err: Error | null, result?: User) {
         if (err || result === undefined) {

@@ -11,17 +11,18 @@ function populate(){
     dbUser.deleteAll()
 
     //Delete metrics
-    dbUser.getAll(
-        (err: Error | null, result: any) => {
-            if(err) throw err
-            result.forEach((user : User) => {
+    dbUser.getAll((err: Error | null, result: any) => {
+        if(err) throw err
 
-                dbMet.deleteAllFromID(user.username, (err: Error | null, result2: any) => {
-                    if(err) throw err
-                    dbMet.delete(result2, user.username)
+        result.forEach((user : User) => {
+            dbMet.deleteAllFromID(user.username, (err: Error | null, result2: any) => {
+                if(err) throw err
+                dbMet.delete(result2, user.username, () => {
+                    //nothing to do here
                 })
             })
         })
+    })
     
     //Add 2 users
     var user1 = new User("Barbaraaa", "barbara.germaneau@edu.ece.fr", "aaaa")

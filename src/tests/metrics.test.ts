@@ -5,8 +5,6 @@ import { LevelDB } from "../leveldb"
 const dbPath: string = 'db_test'
 var dbMet: MetricsHandler
 
-const a: number = 0
-
 describe('Metrics', function () {
     before(function () {
         //clear database
@@ -21,7 +19,7 @@ describe('Metrics', function () {
     //Describe the get method
     describe('#getOne', function () {
         it('should get empty array on non existing group', function () {
-            //test on getOne function when clean the db
+            //test on getOne function when clean the db, use id "0"
             dbMet.getOne("0", function (err: Error | null, result?: Metric[]) {
                 //expect result to be null
                 expect(err).to.be.null
@@ -32,8 +30,6 @@ describe('Metrics', function () {
             })
         })
     })
-
-    //TEST SAVE
 
     //'#save' should save data
     describe('#save', function () {
