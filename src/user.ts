@@ -63,10 +63,12 @@ export class UserHandler {
         this.db.get(`user:${username}`, function (err: Error, data: any) {
             //return error like key not found
             if (err) callback(err)
+            
             //(password:email)=value is undefined
             else if (data === undefined) callback(null, data)
+        
             //username found => create a user
-            callback(null, User.fromDb(username, data))
+            else callback(null, User.fromDb(username, data))            
         })
     }
 
@@ -104,6 +106,7 @@ export class UserHandler {
     public checkUserExist(users : User[], username: string, email: string,
         callback : (exist: false | true) => void
     ){
+        var find = false
         if(users.length === 0){
             callback(false)
         }
@@ -111,11 +114,15 @@ export class UserHandler {
         else{
             users.forEach((user: User) => {
                 if(user.email === email || user.username === username)
-                    callback(true)
+                    find = true
+                    // callback(true)
                 //user doesn't exist yet
-                else callback(false)
+                // else callback(false)
             })
         }
+
+        if(find) callback(true)
+        else callback(false)
     }
 
     //Delete all users
