@@ -72,7 +72,6 @@ app.get('/metrics/:id', (req: any, res: any) => {
         if(err) throw err
         res.status(200).send(result)
         console.log(result)
-        res.render('index', { name: req.session.username })
         }
     )
 })

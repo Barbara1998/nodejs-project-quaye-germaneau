@@ -30,7 +30,37 @@
                     })
                 });
             }
-        </script>
+            function getTimestamps(){
+                var tab = []
+                $.getJSON("/metrics/"+id, {}, (data) => {
+                    const content = data.map(d => {
+                        tab.push({ x : d.timestamp , y : d.value})              
+                    })
+                });
+                return tab;
+            }
+
+                window.onload = function () {
+                console.log("timestamps")
+                console.log(tab)
+                
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    animationEnabled: true,
+                    theme: "light2",
+                    title:{
+                        text: id+"'s graph"
+                    },
+                    axisY:{
+                        includeZero: false
+                    },
+                    data: [{        
+                        type: "line",       
+                        dataPoints: tab
+                    }]
+                });
+                chart.render();
+              }
+              </script>
     </head>
     <body class="container">
         <div class="col-md-6 col-md-offset-3">
@@ -87,11 +117,13 @@
                 <button type="submit" class="btn btn-danger" id="delete-metric" onClick="deleteMetric()">Delete</button>
             </div> 
         </div> 
+        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+            <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        </div>
     </body>
 
     <script>
         var id = '<%= name %>';
-
         $('#show-metrics').click((e) => {
             e.preventDefault();
             $.getJSON("/metrics/"+id, {}, (data) => {
