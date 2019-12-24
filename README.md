@@ -1,5 +1,7 @@
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
+[https://badgen.net/badge/contributors/2/:cyan?icon=github]
+
 # nodejs-project-quaye-germaneau
 
 > Nodejs & DevOps projects ING4    
