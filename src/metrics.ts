@@ -1,6 +1,3 @@
-//not good
-//import LevelDB = require('./leveldb')
-//this.db = LevelDB.open(dbPath) : error on open solution:
 import {LevelDB} from './leveldb'
 import WriteStream from 'level-ws'
 
@@ -191,22 +188,21 @@ export class MetricsHandler {
         })
     }
 
-    //delete in the db
-    // public delete(metrics: Metric[], id: string){
-    //     //for each metric we recreate the key to identify the metric to delete
-    //     metrics.forEach( (metric: Metric) => {
-    //         let tempKey : string = `metric:${id}:${metric.timestamp}`
-    //         this.db.del(tempKey)
-    //     })
-    // }
-
     public delete(metrics: Metric[], id: string, callback : () => void ){
         //for each metric we recreate the key to identify the metric to delete
-        metrics.forEach( async (metric: Metric) => {
-            let tempKey : string = `metric:${id}:${metric.timestamp}`
-            await this.db.del(tempKey)
-        })
-        //callback is called after all delete are done, use await because of asynch
-        callback()
+        let i = 0
+        if(metrics.length != 0){
+            metrics.forEach((metric: Metric) => {
+                let tempKey : string = `metric:${id}:${metric.timestamp}`
+                this.db.del(tempKey, () => {
+                    //call callback when finish to delete the last metric
+                    if(i === metrics.length)
+                        callback()
+                })
+                i++
+            })
+        }
+        //call calback even if no metrics to delete (because wrong)
+        else callback()
     }
 }
