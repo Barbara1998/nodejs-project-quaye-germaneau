@@ -11,9 +11,6 @@
                         option.value = d.timestamp;
                         option.text = d.timestamp;
                         document.getElementById("updateTimestamp").appendChild(option);
-
-                        // console.log('<option value="'+d.timestamp+'">'+d.timestamp+'</option>');
-                        // return ('<option value="'+d.timestamp+'">'+d.timestamp+'</option>');
                     })
                 });
             };
@@ -24,28 +21,26 @@
                         option.value = d.timestamp;
                         option.text = d.timestamp;
                         document.getElementById("deleteTimestamp").appendChild(option);
-
-                        // console.log('<option value="'+d.timestamp+'">'+d.timestamp+'</option>');
-                        // return ('<option value="'+d.timestamp+'">'+d.timestamp+'</option>');
-                    })
+                   })
                 });
             }
         </script>
     </head>
-    <body class="container">
+    <body class="container" style="background-color: #ffffff;">
         <div class="col-md-6 col-md-offset-3">
-                <h1>Hello <%= name %></h1>
-                <button class="btn btn-success" id="show-metrics">
+                <div style="background-color: #F1F5F1;margin-top: 20px; border-radius: 20px; padding: 10px 30px;"><h1>Hello <%= name %></h1></div>
+                
+                <button class="btn btn-success" id="show-metrics" style="margin-top: 20px;">
                 Bring the metrics
                 </button>
-                <button class="btn btn-danger" href="/logout" onClick='document.location.href="/logout"'>
+                <button class="btn btn-danger" href="/logout" onClick='document.location.href="/logout"' style="margin-top: 20px;">
                     Logout
                 </button>
-                <div id="metrics"></div>
+                <div id="metrics" style="margin-top: 10px; background-color: #F1F5F1; border-radius: 15px; padding-left: 10px;"></div>
         </div>
 
         <!-- ADD -->
-        <div class = "row">
+        <div class = "row" style="background-color: #F1F5F1; margin-top: 20px; border-radius: 20px;" >
             <div class="col-md" style="margin: 30px 20px;">
                 <h3>Add a metric</h3>
                 <form method="post" id="addForm"> 
@@ -84,7 +79,7 @@
                         <script>deleteOption();</script> 
                     </select>
                 </div>
-                <button type="submit" class="btn btn-danger" id="delete-metric" onClick="deleteMetric()">Delete</button>
+                <button type="submit" class="btn btn-danger" id="delete-metric" onClick="deleteMetric()" style="margin-top: 15px;">Delete</button>
             </div> 
         </div> 
     </body>
@@ -123,5 +118,5 @@
                     document.location.reload(true)
                 });
         }
-    </script>>
+    </script>
 </html>
