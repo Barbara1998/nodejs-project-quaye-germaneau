@@ -32,7 +32,6 @@ export class User {
     
     public validatePassword(toValidate: String): boolean {
         // return comparison with hashed password
-        //return utre chose ?????????????????
         // return false
         return true
     }
