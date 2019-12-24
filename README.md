@@ -1,3 +1,5 @@
+[![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
+
 # nodejs-project-quaye-germaneau
 
 > Nodejs & DevOps projects ING4    
@@ -30,11 +32,11 @@ The project is a simple web API with a dashboard that allow user to :
   - pre-populate the database with at least two users and their own metrics   
 
 * Tests
-  - use of Mocha and Chai
+  - used of Mocha and Chai
   - Travis CI
 
 # Installation
-After downloadinf or cloning our repository open it in a code editing platform open your terminal and execute the following command in this specific order : 
+After downloading or cloning our repository open it in a code editing platform open your terminal and execute the following command in this specific order : 
 
 1. Install node modules and dependencies : `npm install`      
 2. Populate the database : `npm run populate`   
