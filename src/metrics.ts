@@ -1,6 +1,3 @@
-//not good
-//import LevelDB = require('./leveldb')
-//this.db = LevelDB.open(dbPath) : error on open solution:
 import {LevelDB} from './leveldb'
 import WriteStream from 'level-ws'
 
@@ -32,11 +29,9 @@ export class MetricsHandler {
         const stream = WriteStream(this.db)
         stream.on('error', callback)
         stream.on('close', callback)
-        console.log("in save metrics")
         metrics.forEach((m: Metric) => {
             stream.write({ key: `metric:${id}:${m.timestamp}`, value: m.value })
-            console.log(id)
-            console.log(m.timestamp)
+            console.log(`metric:${id}:${m.timestamp}`)
         })
         stream.end()
     }
@@ -58,6 +53,8 @@ export class MetricsHandler {
             })
         })
     }
+
+
     //get all metrics
     public getAll(
         callback : (error: Error | null, result : any | null) => void
@@ -91,8 +88,7 @@ export class MetricsHandler {
         }
 
     
-    //get one metric
-    //compare id from the request
+    //get all metrics of ONE user, compare id from the request
     public getOne(
         id: string,
         callback : (error: Error | null, result : any | null) => void
@@ -136,11 +132,10 @@ export class MetricsHandler {
         this.db.createReadStream()
         .on('data', function (data) {
             let tempKey : string = `metric:${id}:${timestamp}`
-            console.log("DELETE FORM ID")
             //look for the right key from the metric we want to delete
             if(data.key == tempKey){
                 console.log(`metric:${id}:${timestamp}`)
-                let metric : Metric = new Metric(timestamp, data.value)
+                let metric : Metric = new Metric( timestamp, data.value)
                 metrics.push(metric)
             }
         })
@@ -194,12 +189,21 @@ export class MetricsHandler {
     }
 
     //delete in the db
-    public delete(metrics: Metric[], id: string){
+    public delete(metrics: Metric[], id: string, callback : () => void ){
         //for each metric we recreate the key to identify the metric to delete
-        metrics.forEach( (metric: Metric) => {
-            let tempKey : string = `metric:${id}:${metric.timestamp}`
-            this.db.del(tempKey)
-        })
+        let i = 0
+        if(metrics.length != 0){
+            metrics.forEach((metric: Metric) => {
+                let tempKey : string = `metric:${id}:${metric.timestamp}`
+                this.db.del(tempKey, () => {
+                    //call callback when finish to delete the last metric
+                    if(i === metrics.length)
+                        callback()
+                })
+                i++
+            })
+        }
+        //call calback even if no metrics to delete (because wrong timestamp)
+        else callback()
     }
-
 }

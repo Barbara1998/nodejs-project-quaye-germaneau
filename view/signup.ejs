@@ -9,30 +9,42 @@
             <!-- left column : form for register-->
             <div class="col-md" style="margin: 30px 20px;">
                 <h2>SIGN UP</h2>
-                <form action="/signup" method="post">
+                <form action="/signup" method="post" id="signupForm">
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required="required">
                     </div>
                     <div class="form-group">
-                        <label for="inputEmail">Email address</label>
-                        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Enter email" required="required">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required="required">
                     </div>
                     <div class="form-group">
-                            <label for="inputConfirmEmail">Confirm Email address</label>
-                            <input type="email" class="form-control" id="inputConfirmEmail" name="confirmEmail" placeholder="Enter email" required="required">
+                            <label for="confirmEmail">Confirm Email address</label>
+                            <input type="email" class="form-control" id="confirmEmail" name="confirmEmail" placeholder="Enter email" required="required">
                     </div>
                     <div class="form-group">
-                        <label for="inputPassword">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password" required="required">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required="required">
                     </div>
                     <button type="submit" class="btn btn-primary" id="register">Register</button>
                 </form>
             </div>
             <!-- right colum : image-->
             <div class="col-md">
-                <img src="../img/a.jpg" class="img-fluid" alt="Responsive image" style="width: 100%; height: auto;">
+                <!-- <img src="../img/dashboard.jpg" class="img-fluid" alt="Responsive image" style="width: 100%; height: auto;"> -->
             </div>
         </div>
     </body>
+    <script>
+        $("#signupForm").submit((e)=>{
+            var email = document.getElementById("email").value;
+            var confirmEmail = document.getElementById("confirmEmail").value;
+            if( email !== confirmEmail){
+                e.preventDefault();
+                document.getElementById("email").value = "";
+                document.getElementById("confirmEmail").value = "";
+                alert("Correct your email address fields please");
+            }
+        })  
+    </script>
 </html>

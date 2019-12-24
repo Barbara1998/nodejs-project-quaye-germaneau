@@ -32,15 +32,30 @@ export class User {
     
     public validatePassword(toValidate: String): boolean {
         // return comparison with hashed password
-        //return utre chose ?????????????????
-        // return false
-        return true
+        if(toValidate ===  this.getPassword())
+            return true
+        else return false
     }
 }
 
 export class UserHandler {
     public db: any
+
+    constructor(path: string) {
+        this.db = LevelDB.open(path)
+    }
   
+    public closeDB(){
+        this.db.close();
+    }
+
+    //save a new user the user's database
+    public save(user: User, callback: (err: Error | null) => void) {
+        this.db.put(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
+            callback(err)
+        })
+    }
+
     //get one specific user
     public get(username: string, callback: (err: Error | null, result?: User) => void) {
         //use database function get : key / value
@@ -85,20 +100,16 @@ export class UserHandler {
             })
     }
 
-
+    //check if user exists in database, for sign up
     public checkUserExist(users : User[], username: string, email: string,
         callback : (exist: false | true) => void
-    ) {
-        console.log('check')
-
+    ){
         if(users.length === 0){
-            console.log("empty")
             callback(false)
         }
         
         else{
             users.forEach((user: User) => {
-                console.log('check for eeach')
                 if(user.email === email || user.username === username)
                     callback(true)
                 //user doesn't exist yet
@@ -119,19 +130,11 @@ export class UserHandler {
             })
     }
 
-  
-    //save a new user the user's database
-    public save(user: User, callback: (err: Error | null) => void) {
-        this.db.put(`user:${user.username}`, `${user.getPassword()}:${user.email}`, (err: Error | null) => {
+    //Delete one user
+    public delete(username: string, callback: (err: Error | null) => void) {
+        this.db.del("user:"+username, function(err : Error | null) {
             callback(err)
         })
     }
   
-    public delete(username: string, callback: (err: Error | null) => void) {
-        // TODO
-    }
-  
-    constructor(path: string) {
-        this.db = LevelDB.open(path)
-    }
 }
