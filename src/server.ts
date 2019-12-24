@@ -1,6 +1,6 @@
 //import express module
 import express = require('express')
-import { MetricsHandler } from './metrics'
+import { MetricsHandler, Metric } from './metrics'
 import path = require('path')
 import bodyparser = require('body-parser')
 
@@ -39,29 +39,33 @@ app.use(session({
 //     res.end()
 // })
 
-//route 2
-app.get(
-    '/hello/:name', 
-    (req, res) => res.render('hello.ejs', {name: req.params.name})
-)
+// //route 2
+// app.get(
+//     '/hello/:name', 
+//     (req, res) => res.render('hello.ejs', {name: req.params.name})
+// )
 
 //declare a instance of MetricsHandler
 const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
 
 //route 3 : write metrics (key, value) in db
 app.post('/metrics/:id', (req: any, res: any) => {
-    dbMet.save(req.params.id, req.body, (err: Error | null) => {
+    let metrics : Metric[] = []
+    //create new timestamp
+    var timestamp = Date.now().toString()
+    let metric = new Metric(timestamp, parseInt(req.body.addValue))
+    metrics.push(metric)
+    dbMet.save(req.params.id, metrics, (err: Error | null) => {
         if (err) throw err
-        res.status(200).send("Ya qqch")
+        res.redirect('/')
     })
 })
 
 //route for updating value of a metric
 app.post('/metrics/:id/:timestamp', (req: any, res: any) => {
-
-    dbMet.update(req.params.id, req.params.timestamp, req.body[0], (err: Error | null) => {
+    dbMet.update(req.params.id, req.params.timestamp, parseInt(req.body.updateValue), (err: Error | null) => {
         if (err) throw err
-        res.status(200).send("update metric")
+        res.redirect('/')
     })
 })
 
@@ -187,23 +191,10 @@ app.post('/signup', (req: any, res: any, next: any) => {
 
                         req.session.loggedIn = true
                         req.session.user = newUser
-                        res.redirect('/')  
-
-                        console.log(req.session.user)
-                        console.log("balba")     
+                        res.redirect('/')     
                     })
                 }
-            })
-
-            // if(ok === true){
-            //     console.log("ok=true")
-            //     req.session.loggedIn = true
-            //     req.session.user = newUser
-            //     res.redirect('/')  
-
-            //     console.log(req.session.user)
-            // }
-            
+            })  
     })
 })
 
