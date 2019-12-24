@@ -149,10 +149,11 @@ app.post('/login', (req: any, res: any, next: any) => {
         //if not found error
         if (err) next(err)
         //if undefined not found
-        if (result === undefined || !result.validatePassword(req.body.password)) {
+        else if (result === undefined || !result.validatePassword(req.body.password)) {
             res.redirect('/login')
+        }
         //user found
-        } else {
+        else {
             req.session.loggedIn = true
             req.session.user = result
             res.redirect('/')
