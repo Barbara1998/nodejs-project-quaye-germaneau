@@ -1,6 +1,3 @@
-//not good
-//import LevelDB = require('./leveldb')
-//this.db = LevelDB.open(dbPath) : error on open solution:
 import {LevelDB} from './leveldb'
 import WriteStream from 'level-ws'
 
