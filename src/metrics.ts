@@ -29,7 +29,6 @@ export class MetricsHandler {
     //SAVE
     public save(id: string, metrics: Metric[], callback: (error: Error | null) => void) {
         //stream that writes on the db
-        console.log(id + metrics)
         const stream = WriteStream(this.db)
         stream.on('error', callback)
         stream.on('close', callback)
@@ -53,17 +52,9 @@ export class MetricsHandler {
                 if(m.timestamp == timestamp){
                     stream.write({ key: `metric:${id}:${timestamp}`, value: newValue })
                     stream.end()
-
-                }
-                else{
-                    console.log("This timestamp doesn't exist for this user")
-                    stream.end()
-
                 }
             })
-
         })
-
     }
     //get all metrics
     public getAll(
