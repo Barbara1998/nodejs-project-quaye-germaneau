@@ -95,8 +95,9 @@ app.get('/metrics/:id', (req: any, res: any) => {
 app.delete('/metrics/:id/:timestamp', (req: any, res: any) => {
     dbMet.deleteOneFromID(req.params.id, req.params.timestamp, (err: Error | null, result: any) => {
             if(err) throw err
-            res.status(200).send(result)
-            dbMet.delete(result, req.params.id)
+            dbMet.delete(result, req.params.id, function(){
+                res.status(200).send(result)
+            })
         }
     )
 })
@@ -105,8 +106,9 @@ app.delete('/metrics/:id/:timestamp', (req: any, res: any) => {
 app.delete('/metrics/:id', (req: any, res: any) => {
     dbMet.deleteAllFromID(req.params.id, (err: Error | null, result: any) => {
         if(err) throw err
-        res.status(200).send(result)
-        dbMet.delete(result, req.params.id)
+        dbMet.delete(result, req.params.id, function(){
+            res.status(200).send(result)
+        })
     })
 })
 

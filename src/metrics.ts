@@ -91,8 +91,7 @@ export class MetricsHandler {
         }
 
     
-    //get one metric
-    //compare id from the request
+    //get all metrics of ONE user, compare id from the request
     public getOne(
         id: string,
         callback : (error: Error | null, result : any | null) => void
@@ -194,12 +193,21 @@ export class MetricsHandler {
     }
 
     //delete in the db
-    public delete(metrics: Metric[], id: string){
-        //for each metric we recreate the key to identify the metric to delete
-        metrics.forEach( (metric: Metric) => {
-            let tempKey : string = `metric:${id}:${metric.timestamp}`
-            this.db.del(tempKey)
-        })
-    }
+    // public delete(metrics: Metric[], id: string){
+    //     //for each metric we recreate the key to identify the metric to delete
+    //     metrics.forEach( (metric: Metric) => {
+    //         let tempKey : string = `metric:${id}:${metric.timestamp}`
+    //         this.db.del(tempKey)
+    //     })
+    // }
 
+    public delete(metrics: Metric[], id: string, callback : () => void ){
+        //for each metric we recreate the key to identify the metric to delete
+        metrics.forEach( async (metric: Metric) => {
+            let tempKey : string = `metric:${id}:${metric.timestamp}`
+            await this.db.del(tempKey)
+        })
+        //callback is called after all delete are done, use await because of asynch
+        callback()
+    }
 }
