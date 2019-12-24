@@ -1,6 +1,6 @@
 //import express module
 import express = require('express')
-import { MetricsHandler } from './metrics'
+import { MetricsHandler, Metric } from './metrics'
 import path = require('path')
 import bodyparser = require('body-parser')
 
@@ -50,10 +50,15 @@ const dbMet: MetricsHandler = new MetricsHandler('./db/metrics')
 
 //route 3 : write metrics (key, value) in db
 app.post('/metrics/:id', (req: any, res: any) => {
-    dbMet.save(req.params.id, req.metrics, (err: Error | null) => {
+    let metrics : Metric[] = []
+    //create new timestamp
+    var timestamp = Date.now().toString()
+    let metric = new Metric(timestamp, parseInt(req.body.addValue))
+    metrics.push(metric)
+    dbMet.save(req.params.id, metrics, (err: Error | null) => {
         if (err) throw err
-        res.status(200).send("Ya qqch")
-        res.render('index.ejs', {name: req.session.user.username})
+        res.redirect('/')
+    })
 })
 
 //route for updating value of a metric
@@ -78,8 +83,8 @@ app.get('/metrics/:id', (req: any, res: any) => {
     dbMet.getOne(req.params.id, (err: Error | null, result: any) => {
         if(err) throw err
         res.status(200).send(result)
-        console.log(req.session.username)
-        res.render('index', { name: req.session.username })
+        console.log(result)
+        //res.render('index', { name: req.session.username })
         }
     )
 })
