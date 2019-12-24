@@ -39,7 +39,7 @@ The project is a simple web API with a dashboard that allow user to :
 After downloading or cloning our repository open it in a code editing platform open your terminal and execute the following command in this specific order : 
 
 1. Install node modules and dependencies : `npm install`      
-2. Populate the database : `npm run populate`   
+2. Populate the database and create folder for database: `npm run populate`   
 3. Run tests : `npm run test`     
 4. Run the application : `npm run dev` or `npm run start`
 
